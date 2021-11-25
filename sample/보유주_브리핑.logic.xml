@@ -1,0 +1,18 @@
+<logic version="1" id="619f33f15ac691cdb906f9c6">
+	<name>보유주 브리핑</name>
+	<memo>보유정보를 메신저로 알린다.</memo>
+	<vars>
+		<config name="종목코드" type="shcode"></config>
+		<indicator name="보유정보" type="HoldInfo">
+			<param name="shcode">종목코드</param>
+		</indicator>
+		<indicator name="캔들" type="Candle">
+			<param name="chart">종목코드</param>
+		</indicator>
+	</vars>
+	<script><![CDATA[datestr = f"{현재날짜[0:4]}-{현재날짜[4:6]}-{현재날짜[6:]}"
+rate = (캔들(오늘).종가 / 보유정보.평균단가) * 100 - 100
+msg = f"{datestr} {종목명(종목코드)} 총보유량:{보유정보.총보유량}주, 평균단가:{보유정보.평균단가:.0f}원, 종가:{캔들(오늘).종가:.0f}원, 수익률:{rate:.2f}% 오늘 매도{보유정보.오늘매도량}주/매수{보유정보.오늘매수량}주({보유정보.오늘매수단가:.0f}원)"
+#print(msg)
+slack(msg)]]></script>
+</logic>
