@@ -9,6 +9,8 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=secret
       - MONGO_INITDB_DATABASE=sogogi
+    volumes:
+      - ./mongo:/data/db
 
   bf-mysql:
     container_name: bf-mysql
@@ -23,6 +25,7 @@ services:
       - TZ=Asia/Seoul
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
+      - ./mysql:/var/lib/mysql
       - /etc/localtime:/etc/localtime:ro
 
   beefproj:
