@@ -1,0 +1,31 @@
+version: '3'
+services:
+  bf-mysql:
+    container_name: bf-mysql
+    hostname: bf-mysql
+    #image: mariadb # 64bit OS required (RPi3 or above)
+    image: ugeek/mariadb:arm
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_USER=sogogi
+      - MYSQL_PASSWORD=master
+      - MYSQL_DATABASE=sogogi
+      - TZ=Asia/Seoul
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+
+  beefproj:
+    depends_on:
+      - bf-mysql
+    container_name: beefproj
+    hostname: beefproj
+    image: beefproj/beefproj
+    restart: unless-stopped
+    ports:
+      - 30080:80
+    environment:
+      - DSN_MYSQL=sogogi:master@tcp(bf-mysql:3306)/sogogi
+      - DSN_MONGO=mongodb+srv://beefproj:password@cluster0.v0hod.mongodb.net/databaseName?retryWrites=true&w=majority
