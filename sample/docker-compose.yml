@@ -36,6 +36,8 @@ services:
     hostname: beefproj
     image: beefproj/beefproj:latest
     restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
     ports:
       - 30080:80
     environment:
